@@ -26,7 +26,10 @@ var userSchema = mongoose.Schema({
         token        : String,
         email        : String,
         name         : String
-    }
+    },
+    userid: String,
+    // payment info later
+    pastOrders: Order[]
 
 });
 

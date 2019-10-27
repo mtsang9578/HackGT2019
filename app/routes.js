@@ -182,6 +182,39 @@ module.exports = function(app, passport) {
             res.redirect('/profile');
         });
     });
+// =============================================================================
+    // API routes
+// =============================================================================
+
+    var User       = require('../app/models/user');
+    var Item       = require('../app/models/item');
+    var Order       = require('../app/models/order');
+    var TableOrder       = require('../app/models/tableOrder');
+    // CUSTOMER SIDE
+    // retrieves menu
+    app.get('/api/menu', function(req, res) {
+        Item.find(function(err, items) {
+            if (err)
+                res.send(err);
+            res.json(items);
+        });
+    });
+
+    // CLIENT SIDE
+    // adds item to menu
+    app.post('/api/menu', function(req, res) {
+            var item = Item();
+            item.comments = [];
+            item.price = req.body.price;
+            item.pictureId = req.body.pictureId;
+            item.details = req.body.details;
+            item.save(function(err) {
+            if (err)
+                res.send(err);
+
+            res.json({ message: 'Item created!' });
+        });
+    });
 
 
 };
