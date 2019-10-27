@@ -4,7 +4,8 @@
   "description": "QR code to online menu service that sends orders to NCR Silver",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bin/www"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,8 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "mongodb": "^3.3.3",
+    "node": "^12.12.0",
+    "passport": "^0.4.0",
     "passport-local": "^1.0.0"
   }
 }
