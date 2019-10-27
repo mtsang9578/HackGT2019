@@ -1,17 +1,45 @@
-const express = require('express');
-const path = require('path');
-const React = require('react');
-const renderToString = require('react-dom/server').renderToString;
-const PORT = process.env.PORT || 5000;
-
+const express = require('express')
 const app = express();
+const MongoClient = require('mongodb').MongoClient;
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'dist')));
+var router = express.Router();
 
-app.use('/', (req, res) => {
-  res.render('index');
+
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    dbo.collection("users").findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+const uri = "mongodb+srv://shahid:TechPassword10@cluster0-1q7ty.mongodb.net/test"
+MongoClient.connect(uri, function(err, client) {
+   if(err) {
+        console.log('Error occurred while connecting to MongoDB Atlas...\n',err);
+   }
+   console.log('Connected...');
+   var dbo = client.db("mydb");
+   client.close();
 });
 
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+app.use('/api', router);
+
+
+
+app.listen(process.env.PORT || 8080);
+
+
