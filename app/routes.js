@@ -1,17 +1,30 @@
 module.exports = function(app, passport) {
+var path = require('path');
+var User       = require('../app/models/user');
+
 
 // normal routes ===============================================================
+    app.get('/test', function(req, res) {
+        var newUser = new User();
+        newUser.local.email = "email";
+        newUser.local.password = newUser.generateHash("password");
+        newUser.save(function(err){
+            if(err){
+                res.send(err)
+            }
+        });
 
+         res.sendFile(path.join(__dirname + '/views/login.html'));
+     });
     // show the home page (will also have our login links)
     app.get('/', function(req, res) {
-        res.render('index.ejs');
+         res.sendFile(path.join(__dirname + '/views/login.html'));
     });
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
-        res.render('profile.ejs', {
-            user : req.user
-        });
+        console.log("return profile")
+        res.sendFile(path.join(__dirname + '/views/login.html'));
     });
 
     // LOGOUT ==============================
@@ -28,7 +41,7 @@ module.exports = function(app, passport) {
         // LOGIN ===============================
         // show the login form
         app.get('/login', function(req, res) {
-            res.render('login.ejs', { message: req.flash('loginMessage') });
+            res.sendFile(path.join(__dirname + '/views/login.html'));
         });
 
         // process the login form
@@ -40,14 +53,14 @@ module.exports = function(app, passport) {
 
         // SIGNUP =================================
         // show the signup form
-        app.get('/signup', function(req, res) {
-            res.render('signup.ejs', { message: req.flash('signupMessage') });
-        });
+        // app.get('/signup', function(req, res) {
+        //     res.render('signup.ejs', { message: req.flash('signupMessage') });
+        // });
 
         // process the signup form
         app.post('/signup', passport.authenticate('local-signup', {
             successRedirect : '/profile', // redirect to the secure profile section
-            failureRedirect : '/signup', // redirect back to the signup page if there is an error
+            failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
         }));
 
