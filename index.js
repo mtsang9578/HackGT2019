@@ -38,8 +38,6 @@ MongoClient.connect(uri, function(err, client) {
 
 app.use('/api', router);
 
-
-
 app.listen(process.env.PORT || 8080);
 
 
