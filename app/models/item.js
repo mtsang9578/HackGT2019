@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
+var User       = require('./user');
+var Photo = require('./photo');
 
 var commentSchema = mongoose.Schema({
-	user: User,
+	user: User.schema,
 	description: String,
 	date: Date,
 	stars: Number
@@ -9,9 +11,10 @@ var commentSchema = mongoose.Schema({
 
 var itemSchema = mongoose.Schema({
 
-	comments: commentSchema[], //may need to be [commentSchema]
+	itemName: String,
+	comments: [commentSchema], //may need to be [commentSchema]
 	price: Number,
-	pictureId: Number,//Or Img model
+	picture: Photo.schema,//Or Img model
 	details: String
 
 });

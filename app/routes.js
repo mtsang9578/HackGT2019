@@ -1,7 +1,8 @@
 module.exports = function(app, passport) {
 var path = require('path');
-var User       = require('../app/models/user');
-
+var User   = require('../app/models/user');
+var multer = require('multer');
+var fs = require('fs');
 
 // normal routes ===============================================================
     app.get('/test', function(req, res) {
@@ -203,6 +204,7 @@ var User       = require('../app/models/user');
     var Item       = require('../app/models/item');
     var Order       = require('../app/models/order');
     var TableOrder       = require('../app/models/tableOrder');
+    var Photo = require('../app/models/photo');
     // CUSTOMER SIDE
     // retrieves menu
     app.get('/api/menu', function(req, res) {
@@ -217,6 +219,7 @@ var User       = require('../app/models/user');
     // adds item to menu
     app.post('/api/menu', function(req, res) {
             var item = Item();
+            item.itemName = req.body.itemName;
             item.comments = [];
             item.price = req.body.price;
             item.pictureId = req.body.pictureId;
@@ -226,6 +229,19 @@ var User       = require('../app/models/user');
                 res.send(err);
 
             res.json({ message: 'Item created!' });
+        });
+    });
+    // uploads image
+    app.post('/api/photo', function(req, res) {
+        var newImage = Photo();
+        console.log(req.files);
+        newImage.img.data = fs.readFileSync(req.files.displayImage.path);
+        newImage.img.contentType = 'image/jpeg';
+        newImage.save(function(err) {
+            if (err)
+                res.send(err);
+
+            res.json({ message: 'Photo uploaded!' });
         });
     });
 

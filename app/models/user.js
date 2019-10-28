@@ -1,6 +1,7 @@
 // load the things we need
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
+var Order       = require('./order');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
@@ -29,9 +30,8 @@ var userSchema = mongoose.Schema({
         email        : String,
         name         : String
     },
-    userid: String,
     // payment info later
-    pastOrders: Order[]
+    pastOrders: [Order.schema]
 
 });
 

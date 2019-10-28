@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
+var Order       = require('./order');
 
 var tableOrderSchema = mongoose.Schema({
 
 	tableNumber: Number,
-	orders: Order[]
+	orders: [Order.schema]
 
 });
 
